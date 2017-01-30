@@ -43,7 +43,25 @@ carsControllerRoutes.route('/cars')
         }).catch((err) => {
             res.send(err);
         });
+    })
+    .put((req, res) => {
+        const carId = req.body.car_id;
+        const newName = req.body.name;
+
+        Car.findById(carId).then((car) => {
+            return Object.assign(car, {name: newName});
+        }).then((car) => {
+            return car.save();
+        }).then((updatedCar) => {
+            res.json({
+                msg: 'car updated',
+                updatedCar
+            });
+        }).catch((err) => {
+            res.send(err);
+        });
     });
+
 
 carsControllerRoutes.route('/cars/:car_id')
     .get((req, res) => {
@@ -53,22 +71,7 @@ carsControllerRoutes.route('/cars/:car_id')
         }).catch((err) => {
             res.send(err);
         });
-    })
-    .put((req, res) => {
-        const carId = req.params.car_id;
-        const newName = req.body.name;
-
-        Car.findById(carId).then((car) => {
-            car.name = newName
-            car.save().then((updatedCar) => {
-                res.json({
-                    msg: 'car updated',
-                    updatedCar
-                });
-            }).catch((err) => {
-                res.send(err);
-            });
-        });
     });
+
 
 module.exports = carsControllerRoutes;
