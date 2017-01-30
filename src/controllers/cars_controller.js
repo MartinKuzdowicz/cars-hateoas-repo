@@ -9,53 +9,66 @@ carsControllerRoutes.use((req, res, next) => {
 
 
 carsControllerRoutes.get('/', (req, res) => {
-    res.json({ msg: 'welcome to cars repository'});
+    res.json({msg: 'welcome to cars repository'});
 });
 
 
 carsControllerRoutes.route('/cars')
     .post((req, res) => {
-            var car = new Car();
-            car.name = req.body.name;
+        const newCar = new Car();
+        newCar.name = req.body.name;
 
-            car.save((err) => {
-                if(err) res.send(err);
-            res.json({msg: 'car created'});
+        newCar.save().then((car) => {
+            res.json({
+                msg: 'car created',
+                car
+            });
+        }).catch((err) => {
+            res.send(err);
         });
     })
     .get((req, res) => {
-            Car.find((err, data) => {
-            if(err) res.send(err);
-            res.json(data);
+        Car.find().then((cars) => {
+            res.json(cars);
+        }).catch((err) => {
+            res.send(err);
         });
     })
     .delete((req, res) => {
-            Car.remove({_id: req.body.car_id}, (err) => {
-            if(err) res.send(err);
-            res.json({msg: 'car deleted!'});
+        Car.remove({_id: req.body.car_id}).then((car) => {
+            res.json({
+                msg: 'car deleted!',
+                car
+            });
+        }).catch((err) => {
+            res.send(err);
         });
     });
 
 carsControllerRoutes.route('/cars/:car_id')
     .get((req, res) => {
-            const carId = req.params.car_id;
-            Car.findById(carId, (err, data) => {
-            if(err) res.send(err);
-            res.json(data);
+        const carId = req.params.car_id;
+        Car.findById(carId).then((car) => {
+            res.json(car);
+        }).catch((err) => {
+            res.send(err);
         });
     })
     .put((req, res) => {
-            const carId = req.params.car_id;
-            const newName = req.body.name;
-            Car.findById(carId, (err, bear) => {
-                if(err) res.send(err);
-                bear.name = newName;
-                bear.save((err) => {
-                if(err) res.send(err);
-                res.json({msg: 'car updated'});
+        const carId = req.params.car_id;
+        const newName = req.body.name;
+
+        Car.findById(carId).then((car) => {
+            car.name = newName
+            car.save().then((updatedCar) => {
+                res.json({
+                    msg: 'car updated',
+                    updatedCar
+                });
+            }).catch((err) => {
+                res.send(err);
             });
         });
     });
-
 
 module.exports = carsControllerRoutes;
