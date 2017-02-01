@@ -26,6 +26,15 @@ carsControllerRoutes.get('/', (req, res) => {
 
 
 carsControllerRoutes.route('/cars')
+    .get((req, res) => {
+        const query = req.query;
+
+        Car.find(query).then((cars) => {
+            res.json(cars);
+        }).catch((err) => {
+            res.status(500).send(err);
+        });
+    })
     .post((req, res) => {
         const newCar = new Car();
         newCar.name = req.body.name;
@@ -36,14 +45,7 @@ carsControllerRoutes.route('/cars')
                 car
             });
         }).catch((err) => {
-            res.send(err);
-        });
-    })
-    .get((req, res) => {
-        Car.find().then((cars) => {
-            res.json(cars);
-        }).catch((err) => {
-            res.send(err);
+            res.status(500).send(err);
         });
     })
     .delete((req, res) => {
@@ -53,15 +55,14 @@ carsControllerRoutes.route('/cars')
                 car
             });
         }).catch((err) => {
-            res.send(err);
+            res.status(500).send(err);
         });
     })
     .put((req, res) => {
         const carId = req.body.car_id;
-        const newName = req.body.name;
 
         Car.findById(carId).then((car) => {
-            return Object.assign(car, {name: newName});
+            return Object.assign(car, req.body);
         }).then((car) => {
             return car.save();
         }).then((updatedCar) => {
@@ -70,7 +71,7 @@ carsControllerRoutes.route('/cars')
                 updatedCar
             });
         }).catch((err) => {
-            res.send(err);
+            res.status(500).send(err);
         });
     });
 
@@ -81,7 +82,7 @@ carsControllerRoutes.route('/cars/:car_id')
         Car.findById(carId).then((car) => {
             res.json(car);
         }).catch((err) => {
-            res.send(err);
+            res.status(500).send(err);
         });
     });
 

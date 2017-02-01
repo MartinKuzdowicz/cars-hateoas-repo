@@ -1,8 +1,13 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
 
 var CarSchema = new Schema({
-    name: String
+    name: {type: String},
+    released: {type: Date},
+    carModelName: {type: String},
+    type: {type: String},
+    country: {type: String},
+    avgPrice: {type: Number}
 });
 
 

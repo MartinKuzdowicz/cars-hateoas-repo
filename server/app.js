@@ -4,13 +4,15 @@ var bodyParser = require('body-parser');
 var cfg = require('./src/config');
 var carsControllerRoutes = require('./src/controllers/cars_controller');
 
+var port = process.env.PORT || 3000;
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cfg.appMainRoute, carsControllerRoutes);
 
-app.listen(cfg.port);
-console.log(`startet server at port ${cfg.port}`);
+app.listen(port);
+console.log(`startet server at port ${port}`);
 
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
