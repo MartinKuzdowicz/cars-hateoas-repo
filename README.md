@@ -1,3 +1,3 @@
 ### node.js CRUD application
 
-nodejs, express, mongoose, mongodb, ES6
+Nodejs, express, mongoose, mongodb, ES6, React, webpack
