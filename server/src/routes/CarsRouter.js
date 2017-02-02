@@ -1,6 +1,6 @@
 var express = require('express');
 
-const carsRoutes = (Car, carsController) => {
+const carsRoutes = (carsController) => {
 
     var carsRouter = express.Router();
 

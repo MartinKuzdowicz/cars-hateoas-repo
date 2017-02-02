@@ -12,7 +12,7 @@ var port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(cfg.appMainRoute, carsRouter(CarModel, carsController(CarModel)));
+app.use(cfg.appMainRoute, carsRouter(carsController(CarModel)));
 
 app.listen(port);
 console.log(`startet server at port ${port}`);
