@@ -1,7 +1,12 @@
 const carsController = (Car) => {
 
     const createOne = (req, res) => {
-        const newCar = new Car(req.body);
+        const body = req.body;
+        if(!body.name) {
+            res.status(400).send('Bad Status');
+        }
+
+        const newCar = new Car(body);
 
         newCar.save().then((car) => {
             res.status(201).json({
