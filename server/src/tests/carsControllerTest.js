@@ -22,10 +22,7 @@ describe('carsController Test', () => {
             carsController(CarSchemaMock).createOne(req, res);
             res.status.calledWith(400).should.equal(true);
         });
-    });
 
-
-    describe(' createOne test', () => {
         it('should return status 201 if name exists in req body', () => {
             var CarSchemaMock = function (car) {
                 this.save = sinon.stub().resolves();
@@ -36,5 +33,4 @@ describe('carsController Test', () => {
             res.status.calledWith(201).should.equal(true);
         });
     });
-
 });
