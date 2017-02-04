@@ -1,4 +1,4 @@
-const carsController = (Car) => {
+const carsController = (CarModelSchema) => {
 
     const createOne = (req, res) => {
         const body = req.body;
@@ -6,7 +6,7 @@ const carsController = (Car) => {
             res.status(400).send('Bad Status');
         }
 
-        const newCar = new Car(body);
+        const newCar = new CarModelSchema(body);
 
         newCar.save().then((car) => {
             res.status(201).json({
@@ -21,7 +21,7 @@ const carsController = (Car) => {
     const getAll = (req, res) => {
         const query = req.query;
 
-        Car.find(query).then((cars) => {
+        CarModelSchema.find(query).then((cars) => {
             res.status(200).json(cars);
         }).catch((err) => {
             res.status(500).send(err);
@@ -30,7 +30,7 @@ const carsController = (Car) => {
 
     const getOne = (req, res) => {
         const carId = req.params.car_id;
-        Car.findById(carId).then((car) => {
+        CarModelSchema.findById(carId).then((car) => {
             res.status(200).json(car);
         }).catch((err) => {
             res.status(500).send(err);
@@ -38,7 +38,7 @@ const carsController = (Car) => {
     };
 
     const deleteOne = (req, res) => {
-        Car.remove({_id: req.body.car_id}).then((car) => {
+        CarModelSchema.remove({_id: req.body.car_id}).then((car) => {
             res.status(204).json({
                 msg: 'car deleted!'
             });
@@ -50,7 +50,7 @@ const carsController = (Car) => {
     const updateOne = (req, res) => {
         const carId = req.body.car_id;
 
-        Car.findById(carId).then((car) => {
+        CarModelSchema.findById(carId).then((car) => {
             return Object.assign(car, req.body);
         }).then((car) => {
             return car.save();
