@@ -1,4 +1,4 @@
-const carsController = (CarModelSchema) => {
+const carsController = (CarModelSchema, logger) => {
 
     const createOne = (req, res) => {
         const body = req.body;
@@ -43,7 +43,12 @@ const carsController = (CarModelSchema) => {
     };
 
     const deleteOne = (req, res) => {
-        CarModelSchema.remove({_id: req.body.car_id}).then((car) => {
+        const carId = req.body.car_id;
+        if(!carId){
+            res.status(400).send('Bad Status');
+            return;
+        }
+        CarModelSchema.remove({_id: carId}).then((car) => {
             res.status(204).json({
                 msg: 'car deleted!'
             });
@@ -54,13 +59,17 @@ const carsController = (CarModelSchema) => {
 
     const updateOne = (req, res) => {
         const carId = req.body.car_id;
+        if(!carId){
+            res.status(400).send('Bad Status');
+            return;
+        }
 
         CarModelSchema.findById(carId).then((car) => {
             return Object.assign(car, req.body);
         }).then((car) => {
             return car.save();
         }).then((updatedCar) => {
-            res.json({
+            res.status(204).json({
                 msg: 'car updated',
                 updatedCar
             });

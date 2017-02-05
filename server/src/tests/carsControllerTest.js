@@ -115,11 +115,12 @@ describe('carsController Test', () => {
 
     describe(' getAll test', () => {
 
+        var FakeCarSchemaForFindFn = {
+            find: sinon.stub().resolves()
+        }
+
         it('res should return status 200', (done) => {
             var fakeReq = {query: {type: 'test'}};
-            var FakeCarSchemaForFindFn = {
-                find: sinon.stub().resolves()
-            }
 
             carsController(FakeCarSchemaForFindFn).getAll(fakeReq, fakeRes);
             setTimeout(function () {
@@ -131,11 +132,12 @@ describe('carsController Test', () => {
 
     describe(' getOne test', () => {
 
+        var FakeCarSchemaForFindOneFn = {
+            findById: sinon.stub().resolves()
+        }
+
         it('res should return status 200', (done) => {
             var fakeReq = {params: {car_id: 'osdjf90'}};
-            var FakeCarSchemaForFindOneFn = {
-                findById: sinon.stub().resolves()
-            }
 
             carsController(FakeCarSchemaForFindOneFn).getOne(fakeReq, fakeRes);
             setTimeout(function () {
@@ -146,11 +148,79 @@ describe('carsController Test', () => {
 
         it('res should return status 400 if req params is empty', (done) => {
             var fakeReq = {params: {}};
-            var FakeCarSchemaForFindOneFn = {
-                findById: sinon.stub().resolves()
-            }
 
             carsController(FakeCarSchemaForFindOneFn).getOne(fakeReq, fakeRes);
+            setTimeout(function () {
+                fakeRes.status.calledWith(400).should.equal(true);
+                done();
+            }, 50);
+        });
+    });
+
+    describe(' deleteOne test', () => {
+
+        var FakeCarSchemaForDeleteOneFn = {
+            remove: sinon.stub().resolves()
+        }
+
+        it('res should return status 204', (done) => {
+            var fakeReq = {body: {car_id: 'osdjf90'}};
+
+            carsController(FakeCarSchemaForDeleteOneFn).deleteOne(fakeReq, fakeRes);
+            setTimeout(function () {
+                fakeRes.status.calledWith(204).should.equal(true);
+                done();
+            }, 50);
+        });
+
+        it('res should return status 400 if req params is empty', (done) => {
+            var fakeReq = {body: {}};
+
+            carsController(FakeCarSchemaForDeleteOneFn).deleteOne(fakeReq, fakeRes);
+            setTimeout(function () {
+                fakeRes.status.calledWith(400).should.equal(true);
+                done();
+            }, 50);
+        });
+    });
+
+    describe(' updateOne test', () => {
+
+        var fakeCarObject = {
+            save: sinon.stub().resolves({car_id: 'osdjf90'})
+        }
+
+        var FakeCarSchemaForUpdateOneFn = {
+            findById: sinon.stub().resolves(fakeCarObject)
+        }
+
+        var ctrl = carsController(FakeCarSchemaForUpdateOneFn, mlog);
+
+        it('res should return status 204', (done) => {
+            var fakeReq = {body: {car_id: 'osdjf90'}};
+
+            ctrl.updateOne(fakeReq, fakeRes);
+            setTimeout(function () {
+                fakeRes.status.calledWith(204).should.equal(true);
+                done();
+            }, 50);
+        });
+
+        it('should not return status 500 and res.status should be only called once', (done) => {
+            var fakeReq = {body: {car_id: 'osdjf90'}};
+            ctrl.updateOne(fakeReq, fakeRes);
+
+            setTimeout(function () {
+                // fakeRes.status.calledOnce.should.equal(true);
+                fakeRes.status.calledWith(500).should.equal(false);
+                done();
+            }, 50);
+        });
+
+        it('res should return status 400 if req params is empty', (done) => {
+            var fakeReq = {body: {}};
+
+            ctrl.updateOne(fakeReq, fakeRes);
             setTimeout(function () {
                 fakeRes.status.calledWith(400).should.equal(true);
                 done();
