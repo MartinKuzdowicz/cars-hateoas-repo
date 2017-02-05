@@ -31,6 +31,10 @@ const carsController = (CarModelSchema) => {
 
     const getOne = (req, res) => {
         const carId = req.params.car_id;
+        if(!carId){
+            res.status(400).send('Bad Status');
+            return;
+        }
         CarModelSchema.findById(carId).then((car) => {
             res.status(200).json(car);
         }).catch((err) => {
