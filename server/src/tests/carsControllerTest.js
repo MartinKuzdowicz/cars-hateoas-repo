@@ -2,84 +2,158 @@ require('sinon-as-promised');
 
 var should = require('should'),
     sinon = require('sinon'),
-    mlog = require('mocha-logger');
+    mlog = require('mocha-logger'),
+    sinonMongoose = require('sinon-mongoose'),
+    CarModel = require('../models/CarModel'),
+    mongoose = require('mongoose');
 
 describe('carsController Test', () => {
 
     const carsController = require('../controllers/CarsController');
 
-    class CarSchemaMock {
+    class FakeCarSchema {
         constructor(newCar) {
+            this.constructorCallTest();
             this.name = newCar.name;
             this.save = sinon.stub().resolves();
         }
+
+        constructorCallTest() {
+            mlog.log('constructor was called');
+        }
+
     }
 
-    var CarSchemaMockConstrSpy, fakeResStatusSend, fakeResStatusJson;
+    FakeCarSchema.prototype.find = sinon.stub().resolves();
+
+    var CarSchemaMockConstrSpy, fakeRes, fakeResStatusJson;
 
     ///////////////////////////////////////////////////////////////
 
     before(() => {
 
-        CarSchemaMockConstrSpy = sinon.spy(CarSchemaMock, 'constructor');
+        CarSchemaMockConstrSpy = sinon.spy(FakeCarSchema.prototype, 'constructorCallTest');
 
-        fakeResStatusSend = {
-            status: sinon.stub().returns({send: sinon.spy()})
-        }
-
-        fakeResStatusJson = {
-            status: sinon.stub().returns({json: sinon.spy()})
+        fakeRes = {
+            status: sinon.stub().returns({
+                send: sinon.stub(),
+                json: sinon.stub()
+            })
         }
 
     });
 
     afterEach(() => {
         CarSchemaMockConstrSpy.reset();
-        fakeResStatusSend.status.reset();
+        fakeRes.status.reset();
+
     });
 
     describe(' createOne test', () => {
+        it('should not return status 500 and res.status should be only called once', (done) => {
+
+            let emptyReq = {body: {}};
+            carsController(FakeCarSchema).createOne(emptyReq, fakeRes);
+
+            setTimeout(function () {
+                fakeRes.status.calledOnce.should.equal(true);
+                fakeRes.status.calledWith(500).should.equal(false);
+                done();
+            }, 200);
+        });
+
+        it('should run res.status only once', (done) => {
+
+            let emptyReq = {body: {}};
+            carsController(FakeCarSchema).createOne(emptyReq, fakeRes);
+
+            setTimeout(function () {
+                fakeRes.status.calledOnce.should.equal(true);
+                done();
+            }, 200);
+        });
+
+        it('should not call res.status.json if req.body is empty', (done) => {
+
+            let emptyReq = {body: {}};
+            carsController(FakeCarSchema).createOne(emptyReq, fakeRes);
+
+            setTimeout(function () {
+                fakeRes.status().json.called.should.equal(false);
+                done();
+            }, 200);
+        });
+
         it('should return status 400 if name does not exists in req body', () => {
 
             let emptyReq = {body: {}};
-            carsController(CarSchemaMock).createOne(emptyReq, fakeResStatusSend);
+            carsController(FakeCarSchema).createOne(emptyReq, fakeRes);
 
-            fakeResStatusSend.status.called.should.equal(true);
-            fakeResStatusSend.status.calledWith(400).should.equal(true);
-
+            fakeRes.status.calledWith(400).should.equal(true);
         });
 
-        it('should not call CarSchema contructor if name does not exists in req body', () => {
+
+        it('should not call CarSchema constructor if name does not exists in req body', () => {
 
             let emptyReq = {body: {}};
-            carsController(CarSchemaMock).createOne(emptyReq, fakeResStatusSend);
+            carsController(FakeCarSchema).createOne(emptyReq, fakeRes);
 
             CarSchemaMockConstrSpy.called.should.equal(false);
+            fakeRes.status.calledWith(500).should.equal(false);
 
         });
 
-        it('should return status 201', () => {
+        it('should call res.status once if status 400', () => {
+
+            let emptyReq = {body: {}};
+            carsController(FakeCarSchema).createOne(emptyReq, fakeRes);
+
+            fakeRes.status.called.should.equal(true);
+
+        });
+
+        it('should return status 201', (done) => {
 
             let req = {body: {name: 'test'}};
 
-            carsController(CarSchemaMock).createOne(req, fakeResStatusJson);
+            carsController(FakeCarSchema).createOne(req, fakeRes);
 
             setTimeout(function () {
-                fakeResStatusJson.status.calledWith(201).should.equal(true);
-            }, 200);
+                fakeRes.status.calledWith(201).should.equal(true);
+                done();
+            }, 100);
 
         });
 
-        it('should call CarSchema contructor', () => {
+        it('should call CarSchema constructor', () => {
 
             let req = {body: {name: 'test'}};
 
-            carsController(CarSchemaMock).createOne(req, fakeResStatusJson);
+            carsController(FakeCarSchema).createOne(req, fakeRes);
 
-            setTimeout(function () {
-                CarSchemaMockConstrSpy.called.should.equal(true);
-            }, 200);
+            CarSchemaMockConstrSpy.called.should.equal(true);
 
         });
+
+    });
+
+    describe(' getAll test', () => {
+
+        it('res should return status 200', (done) => {
+
+            var req = {query: {type: 'test'}};
+
+            var FakeCarSchemaForFindFn = {
+                find: sinon.stub().resolves()
+            }
+
+            carsController(FakeCarSchemaForFindFn).getAll(req, fakeRes);
+
+            setTimeout(function () {
+                fakeRes.status.calledWith(200).should.equal(true);
+                done();
+            }, 200);
+        });
+
     });
 });

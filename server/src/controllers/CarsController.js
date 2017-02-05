@@ -2,8 +2,9 @@ const carsController = (CarModelSchema) => {
 
     const createOne = (req, res) => {
         const body = req.body;
-        if(!body.name) {
+        if (!body.name) {
             res.status(400).send('Bad Status');
+            return;
         }
 
         const newCar = new CarModelSchema(body);
