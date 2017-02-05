@@ -1,10 +1,10 @@
 {
-  "name": "cars-repository",
-  "version": "1.0.0",
-  "description": "",
+  "name": "cars-hateoas-repository",
+  "version": "0.0.1",
+  "description": "cars hateoas repository",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha src/tests/carsControllerTest.js"
   },
   "author": "kuzdowicz",
   "license": "ISC",
