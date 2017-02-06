@@ -4,7 +4,8 @@
   "description": "cars hateoas repository",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha src/tests/carsControllerTest.js"
+    "test": "./node_modules/mocha/bin/mocha src/tests/carsControllerTest.js",
+    "start": "node app.js"
   },
   "author": "kuzdowicz",
   "license": "ISC",

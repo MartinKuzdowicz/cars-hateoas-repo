@@ -1,3 +1,5 @@
+var ModelToRestResourceUtils = require('../utils/ModelToRestResourceUtils');
+
 const carsController = (CarModelSchema, logger) => {
 
     const createOne = (req, res) => {
@@ -21,9 +23,13 @@ const carsController = (CarModelSchema, logger) => {
 
     const getAll = (req, res) => {
         const query = req.query;
+        const host = req.headers.host;
 
         CarModelSchema.find(query).then((cars) => {
-            res.status(200).json(cars);
+
+            let carsRestResource = cars.map((c) => ModelToRestResourceUtils.createHAL(c, host));
+            res.status(200).json(carsRestResource);
+
         }).catch((err) => {
             res.status(500).send(err);
         });
@@ -31,12 +37,15 @@ const carsController = (CarModelSchema, logger) => {
 
     const getOne = (req, res) => {
         const carId = req.params.car_id;
+        const host = req.headers.host;
+
         if(!carId){
             res.status(400).send('Bad Status');
             return;
         }
         CarModelSchema.findById(carId).then((car) => {
-            res.status(200).json(car);
+            let c = ModelToRestResourceUtils.createHAL(car, host);
+            res.status(200).json(c);
         }).catch((err) => {
             res.status(500).send(err);
         });
