@@ -27,7 +27,7 @@ const carsController = (CarModelSchema, logger) => {
 
         CarModelSchema.find(query).then((cars) => {
 
-            let carsRestResource = cars.map((c) => ModelToRestResourceUtils.createHAL(c, host));
+            let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHAL(c, host)) : [];
             res.status(200).json(carsRestResource);
 
         }).catch((err) => {

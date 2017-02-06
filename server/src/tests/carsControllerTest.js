@@ -26,7 +26,7 @@ describe('carsController Test', () => {
 
     FakeCarSchema.prototype.find = sinon.stub().resolves();
 
-    var CarSchemaMockConstrSpy, fakeRes, fakeResStatusJson;
+    var CarSchemaMockConstrSpy, fakeRes, fakeReq;
 
     ///////////////////////////////////////////////////////////////
 
@@ -40,6 +40,17 @@ describe('carsController Test', () => {
         }
     });
 
+    beforeEach(() => {
+        fakeReq = {
+            body: {},
+            headers: {
+                host: 'localhost:3000'
+            },
+            query: {},
+            params: {}
+        };
+    });
+
     afterEach(() => {
         CarSchemaMockConstrSpy.reset();
         fakeRes.status.reset();
@@ -48,7 +59,6 @@ describe('carsController Test', () => {
 
     describe(' createOne test', () => {
         it('should not return status 500 and res.status should be only called once', (done) => {
-            let fakeReq = {body: {}};
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
 
             setTimeout(function () {
@@ -59,7 +69,6 @@ describe('carsController Test', () => {
         });
 
         it('should run res.status only once', (done) => {
-            let fakeReq = {body: {}};
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
             setTimeout(function () {
                 fakeRes.status.calledOnce.should.equal(true);
@@ -68,7 +77,6 @@ describe('carsController Test', () => {
         });
 
         it('should not call res.status.json if req.body is empty', (done) => {
-            let fakeReq = {body: {}};
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
             setTimeout(function () {
                 fakeRes.status().json.called.should.equal(false);
@@ -77,27 +85,24 @@ describe('carsController Test', () => {
         });
 
         it('should return status 400 if name does not exists in req body', () => {
-            let fakeReq = {body: {}};
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
             fakeRes.status.calledWith(400).should.equal(true);
         });
 
 
         it('should not call CarSchema constructor if name does not exists in req body', () => {
-            let fakeReq = {body: {}};
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
             CarSchemaMockConstrSpy.called.should.equal(false);
             fakeRes.status.calledWith(500).should.equal(false);
         });
 
         it('should call res.status once if status 400', () => {
-            let fakeReq = {body: {}};
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
             fakeRes.status.called.should.equal(true);
         });
 
         it('should return status 201', (done) => {
-            let fakeReq = {body: {name: 'test'}};
+            fakeReq.body.name = 'test';
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
             setTimeout(function () {
                 fakeRes.status.calledWith(201).should.equal(true);
@@ -106,7 +111,7 @@ describe('carsController Test', () => {
         });
 
         it('should call CarSchema constructor', () => {
-            let fakeReq = {body: {name: 'test'}};
+            fakeReq.body.name = 'test';
             carsController(FakeCarSchema).createOne(fakeReq, fakeRes);
             CarSchemaMockConstrSpy.called.should.equal(true);
         });
@@ -120,11 +125,19 @@ describe('carsController Test', () => {
         }
 
         it('res should return status 200', (done) => {
-            var fakeReq = {query: {type: 'test'}};
 
-            carsController(FakeCarSchemaForFindFn).getAll(fakeReq, fakeRes);
+            carsController(FakeCarSchemaForFindFn, mlog).getAll(fakeReq, fakeRes);
             setTimeout(function () {
                 fakeRes.status.calledWith(200).should.equal(true);
+                done();
+            }, 50);
+        });
+
+        it('res should not return status 500', (done) => {
+
+            carsController(FakeCarSchemaForFindFn, mlog).getAll(fakeReq, fakeRes);
+            setTimeout(function () {
+                fakeRes.status.calledWith(500).should.equal(false);
                 done();
             }, 50);
         });
@@ -133,23 +146,32 @@ describe('carsController Test', () => {
     describe(' getOne test', () => {
 
         var FakeCarSchemaForFindOneFn = {
-            findById: sinon.stub().resolves()
+            findById: sinon.stub().resolves(new CarModel())
         }
 
         it('res should return status 200', (done) => {
-            var fakeReq = {params: {car_id: 'osdjf90'}};
+            fakeReq.params.car_id = 'osdjf90';
 
-            carsController(FakeCarSchemaForFindOneFn).getOne(fakeReq, fakeRes);
+            carsController(FakeCarSchemaForFindOneFn, mlog).getOne(fakeReq, fakeRes);
             setTimeout(function () {
                 fakeRes.status.calledWith(200).should.equal(true);
                 done();
             }, 50);
         });
 
-        it('res should return status 400 if req params is empty', (done) => {
-            var fakeReq = {params: {}};
+        it('res should not return status 500', (done) => {
+            fakeReq.params.car_id = 'osdjf90';
 
-            carsController(FakeCarSchemaForFindOneFn).getOne(fakeReq, fakeRes);
+            carsController(FakeCarSchemaForFindOneFn, mlog).getOne(fakeReq, fakeRes);
+            setTimeout(function () {
+                fakeRes.status.calledWith(500).should.equal(false);
+                done();
+            }, 50);
+        });
+
+        it('res should return status 400 if req params is empty', (done) => {
+
+            carsController(FakeCarSchemaForFindOneFn, mlog).getOne(fakeReq, fakeRes);
             setTimeout(function () {
                 fakeRes.status.calledWith(400).should.equal(true);
                 done();
@@ -164,7 +186,7 @@ describe('carsController Test', () => {
         }
 
         it('res should return status 204', (done) => {
-            var fakeReq = {body: {car_id: 'osdjf90'}};
+            fakeReq.body.car_id = 'osdjf90';
 
             carsController(FakeCarSchemaForDeleteOneFn).deleteOne(fakeReq, fakeRes);
             setTimeout(function () {
@@ -174,7 +196,6 @@ describe('carsController Test', () => {
         });
 
         it('res should return status 400 if req params is empty', (done) => {
-            var fakeReq = {body: {}};
 
             carsController(FakeCarSchemaForDeleteOneFn).deleteOne(fakeReq, fakeRes);
             setTimeout(function () {
@@ -197,7 +218,7 @@ describe('carsController Test', () => {
         var ctrl = carsController(FakeCarSchemaForUpdateOneFn, mlog);
 
         it('res should return status 204', (done) => {
-            var fakeReq = {body: {car_id: 'osdjf90'}};
+            fakeReq.body.car_id = 'osdjf90';
 
             ctrl.updateOne(fakeReq, fakeRes);
             setTimeout(function () {
@@ -207,7 +228,7 @@ describe('carsController Test', () => {
         });
 
         it('should not return status 500 and res.status should be only called once', (done) => {
-            var fakeReq = {body: {car_id: 'osdjf90'}};
+            fakeReq.body.car_id = 'osdjf90';
             ctrl.updateOne(fakeReq, fakeRes);
 
             setTimeout(function () {
