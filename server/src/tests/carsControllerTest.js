@@ -120,12 +120,15 @@ describe('carsController Test', () => {
 
     describe(' getAll test', () => {
 
-        var FakeCarSchemaForFindFn = (function() {
+        var FakeCarSchemaForFindFn = (function () {
             return {
-                find: function() {
+                count: function () {
+                    return 3;
+                },
+                find: function () {
                     return this
                 },
-                skip: function() {
+                skip: function () {
                     return this
                 },
                 limit: sinon.stub().resolves()

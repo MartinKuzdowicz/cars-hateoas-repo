@@ -33,6 +33,9 @@ const carsController = (CarModelSchema, logger) => {
         const sizeParam = req.query.size || 0;
         const size = parseInt(sizeParam);
 
+        // TO FIX
+        var carsCollectionSize = 100
+
         const calcSkipVal = () => page > 0 ? ((page - 1) * size) : 0;
 
         CarModelSchema.find(typeQuery)
@@ -40,11 +43,16 @@ const carsController = (CarModelSchema, logger) => {
             .limit(parseInt(size))
             .then((cars) => {
 
-            let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHALForOne(c, host)) : [];
-            res.status(200).json(carsRestResource);
+                let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHALForOne(c, host)) : [];
+                
+                res.status(200).json(ModelToRestResourceUtils.createHALForAll( carsRestResource,
+                    page,
+                    size,
+                    host,
+                    carsCollectionSize));
 
-        }).catch((err) => {
-            res.status(500).send(err);
+            }).catch((err) => {
+            res.status(500).json({err});
         });
     };
 
@@ -52,7 +60,7 @@ const carsController = (CarModelSchema, logger) => {
         const carId = req.params.car_id;
         const host = req.headers.host;
 
-        if(!carId){
+        if (!carId) {
             res.status(400).send('Bad Status');
             return;
         }
@@ -66,7 +74,7 @@ const carsController = (CarModelSchema, logger) => {
 
     const deleteOne = (req, res) => {
         const carId = req.body.car_id;
-        if(!carId){
+        if (!carId) {
             res.status(400).send('Bad Status');
             return;
         }
@@ -81,7 +89,7 @@ const carsController = (CarModelSchema, logger) => {
 
     const updateOne = (req, res) => {
         const carId = req.body.car_id;
-        if(!carId){
+        if (!carId) {
             res.status(400).send('Bad Status');
             return;
         }
