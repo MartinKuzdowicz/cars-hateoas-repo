@@ -22,10 +22,23 @@ const carsController = (CarModelSchema, logger) => {
     };
 
     const getAll = (req, res) => {
-        const query = req.query;
+
         const host = req.headers.host;
 
-        CarModelSchema.find(query).then((cars) => {
+        const type = req.query.type;
+        const typeQuery = type ? {type} : {};
+
+        const pageParam = req.query.page || 0;
+        const page = pageParam ? parseInt(pageParam) : 0;
+        const sizeParam = req.query.size || 0;
+        const size = parseInt(sizeParam);
+
+        const calcSkipVal = () => page > 0 ? ((page - 1) * size) : 0;
+
+        CarModelSchema.find(typeQuery)
+            .skip(calcSkipVal())
+            .limit(parseInt(size))
+            .then((cars) => {
 
             let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHAL(c, host)) : [];
             res.status(200).json(carsRestResource);

@@ -120,9 +120,17 @@ describe('carsController Test', () => {
 
     describe(' getAll test', () => {
 
-        var FakeCarSchemaForFindFn = {
-            find: sinon.stub().resolves()
-        }
+        var FakeCarSchemaForFindFn = (function() {
+            return {
+                find: function() {
+                    return this
+                },
+                skip: function() {
+                    return this
+                },
+                limit: sinon.stub().resolves()
+            }
+        })();
 
         it('res should return status 200', (done) => {
 
