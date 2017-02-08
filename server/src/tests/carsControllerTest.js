@@ -122,9 +122,7 @@ describe('carsController Test', () => {
 
         var FakeCarSchemaForFindFn = (function () {
             return {
-                count: function () {
-                    return 3;
-                },
+                count: sinon.stub().resolves(),
                 find: function () {
                     return this
                 },

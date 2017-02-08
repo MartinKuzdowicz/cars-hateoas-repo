@@ -1,4 +1,5 @@
 var ModelToRestResourceUtils = require('../utils/ModelToRestResourceUtils');
+var PagingUtils = require('../utils/PagingUtils');
 
 const carsController = (CarModelSchema, logger) => {
 
@@ -28,32 +29,29 @@ const carsController = (CarModelSchema, logger) => {
         const type = req.query.type;
         const typeQuery = type ? {type} : {};
 
-        const pageParam = req.query.page || 0;
-        const page = pageParam ? parseInt(pageParam) : 0;
-        const sizeParam = req.query.size || 0;
-        const size = parseInt(sizeParam);
+        const p = PagingUtils.calculateSkipAndLimit(req);
 
-        // TO FIX
-        var carsCollectionSize = 100
+        CarModelSchema.count({}).then((cnt) => {
 
-        const calcSkipVal = () => page > 0 ? ((page - 1) * size) : 0;
+            CarModelSchema.find(typeQuery)
+                .skip(p.skip)
+                .limit(parseInt(p.limit))
+                .then((cars) => {
 
-        CarModelSchema.find(typeQuery)
-            .skip(calcSkipVal())
-            .limit(parseInt(size))
-            .then((cars) => {
+                    let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHALForOne(c, host)) : [];
 
-                let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHALForOne(c, host)) : [];
-                
-                res.status(200).json(ModelToRestResourceUtils.createHALForAll( carsRestResource,
-                    page,
-                    size,
-                    host,
-                    carsCollectionSize));
+                    res.status(200).json(ModelToRestResourceUtils.createHALForAll(carsRestResource,
+                        p.page,
+                        p.size,
+                        host,
+                        cnt));
 
-            }).catch((err) => {
-            res.status(500).json({err});
+                }).catch((err) => {
+                res.status(500).json({err});
+            });
+
         });
+
     };
 
     const getOne = (req, res) => {
