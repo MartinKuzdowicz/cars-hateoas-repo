@@ -40,7 +40,7 @@ const carsController = (CarModelSchema, logger) => {
             .limit(parseInt(size))
             .then((cars) => {
 
-            let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHAL(c, host)) : [];
+            let carsRestResource = cars ? cars.map((c) => ModelToRestResourceUtils.createHALForOne(c, host)) : [];
             res.status(200).json(carsRestResource);
 
         }).catch((err) => {
@@ -57,7 +57,7 @@ const carsController = (CarModelSchema, logger) => {
             return;
         }
         CarModelSchema.findById(carId).then((car) => {
-            let c = ModelToRestResourceUtils.createHAL(car, host);
+            let c = ModelToRestResourceUtils.createHALForOne(car, host);
             res.status(200).json(c);
         }).catch((err) => {
             res.status(500).send(err);
