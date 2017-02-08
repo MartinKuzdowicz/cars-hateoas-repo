@@ -6,10 +6,12 @@ var ModelToRestResourceUtils = (() => {
         let links = [
             {
                 rel: 'self',
+                method: 'GET',
                 href: `http://${host}${cfg.appMainRoute}/cars/${model._id}`
             },
             {
                 rel: 'filterByType',
+                method: 'GET',
                 href: `http://${host}${cfg.appMainRoute}/cars/?type=${encodeURIComponent(model.type)}`
             }
         ]
@@ -21,24 +23,29 @@ var ModelToRestResourceUtils = (() => {
             content: cars,
             links: [
                 {
-                    'rel': 'next',
-                    'href': `http://${host}${cfg.appMainRoute}/cars/?page=${page+1}&size=${size}`
+                    rel: 'next',
+                    method: 'GET',
+                    href: `http://${host}${cfg.appMainRoute}/cars/?page=${page+1}&size=${size}`
                 },
                 {
-                    'rel': 'prev',
-                    'href': `http://${host}${cfg.appMainRoute}/cars/?page=${page-1}&size=${size}`
+                    rel: 'prev',
+                    method: 'GET',
+                    href: `http://${host}${cfg.appMainRoute}/cars/?page=${page-1}&size=${size}`
                 },
                 {
-                    'rel': 'first',
-                    'href': `http://${host}${cfg.appMainRoute}/cars/?page=${1}&size=${size}`
+                    rel: 'first',
+                    method: 'GET',
+                    href: `http://${host}${cfg.appMainRoute}/cars/?page=${1}&size=${size}`
                 },
                 {
-                    'rel': 'last',
-                    'href': `http://${host}${cfg.appMainRoute}/cars/?page=${carsCollectionSize-size}&size=${size}`
+                    rel: 'last',
+                    method: 'GET',
+                    href: `http://${host}${cfg.appMainRoute}/cars/?page=${carsCollectionSize-size}&size=${size}`
                 },
                 {
-                    'rel': 'self',
-                    'href': `http://${host}${cfg.appMainRoute}/cars/?page=${page}&size=${size}`
+                    rel: 'self',
+                    method: 'GET',
+                    href: `http://${host}${cfg.appMainRoute}/cars/?page=${page}&size=${size}`
                 }
             ]
         }
