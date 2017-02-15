@@ -7,3 +7,4 @@ dist
 public
 .idea
 *.iml
+npm-debug.log
