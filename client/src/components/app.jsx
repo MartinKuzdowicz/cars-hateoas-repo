@@ -1,20 +1,13 @@
 import React from 'react';
-import {Link} from 'react-router';
+import Navigation from './navigation.jsx';
 
 class App extends React.Component {
 
     render() {
         return (
             <div>
+                <Navigation/>
                 <h1>Cars Repository</h1>
-                <ul>
-                    <li>
-                        <Link to="home">AllCars</Link>
-                    </li>
-                    <li>
-                        <Link to="add-car">AddCarForm</Link>
-                    </li>
-                </ul>
                 {this.props.children}
             </div>
         );
