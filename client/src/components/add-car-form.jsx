@@ -13,10 +13,34 @@ class AddCarForm extends Component {
         });
     };
 
+    addCarBtnHandler(e) {
+        e.preventDefault();
+        alert();
+    };
+
     render() {
         return (
             <div>
                 <h3>{this.state.pageTitle}</h3>
+                <div>
+                    <form>
+                        brand
+                        <input />
+                        carModelName
+                        <input />
+                        type
+                        <select>
+                            <option>sport</option>
+                            <option>limo</option>
+                            <option>family</option>
+                            <option>modern</option>
+                        </select>
+                        avgPrice
+                        <input type="number" />
+
+                        <button onClick={(e) => this.addCarBtnHandler(e)} >add car</button>
+                    </form>
+                </div>
             </div>
         );
     }

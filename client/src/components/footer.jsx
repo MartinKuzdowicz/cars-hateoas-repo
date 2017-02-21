@@ -11,6 +11,7 @@ class Footer extends Component {
         return (
             <div>
                 <footer>
+                    <hr />
                     {this.state.footerContent}
                 </footer>
             </div>
