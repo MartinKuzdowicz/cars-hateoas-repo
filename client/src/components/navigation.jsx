@@ -3,21 +3,24 @@ import {Link} from 'react-router';
 
 class Navigation extends Component {
 
-    render(){
+    render() {
         return (
             <div>
-                <ul>
-                    <li>
-                        <Link to="home">AllCars</Link>
-                    </li>
-                    <li>
-                        <Link to="add-car">AddCarForm</Link>
-                    </li>
-                </ul>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to="home">AllCars</Link>
+                        </li>
+                        <li>
+                            <Link to="add-car">AddCarForm</Link>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         );
     }
 
-};
+}
+;
 
 export default Navigation;
