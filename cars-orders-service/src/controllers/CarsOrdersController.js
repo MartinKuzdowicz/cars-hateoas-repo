@@ -1,3 +1,4 @@
+const uuidV4 = require('uuid/v4');
 
 const CarsOrdersController = () => {
 
@@ -6,7 +7,12 @@ const CarsOrdersController = () => {
 
         const carToOrderId = req.body.carToOrderId;
 
-        console.log(carToOrderId);
+        const newOrder = {
+            uuid: uuidV4(),
+            clientId : Math.random(),
+            carId: carToOrderId,
+            timestamp: Date.now()
+        };
 
         res.json({msg: 'order send'});
     };
