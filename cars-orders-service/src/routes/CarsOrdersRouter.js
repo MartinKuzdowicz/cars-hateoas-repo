@@ -16,7 +16,7 @@ const CarsOrdersRouter = (CarsOrdersController) => {
         res.json({msg: 'welcome to cars orders service'});
     });
 
-    router.route('/place-order').get(CarsOrdersController.placeOrder);
+    router.route('/place-order').post(CarsOrdersController.placeOrder);
 
     return router;
 
