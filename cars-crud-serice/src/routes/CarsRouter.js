@@ -23,7 +23,7 @@ const carsRoutes = (carsController) => {
 
 
     carsRouter.get('/', (req, res) => {
-        res.json({msg: 'welcome to cars repository'});
+        res.json({msg: 'welcome to cars crud service'});
     });
 
 

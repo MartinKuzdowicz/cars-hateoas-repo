@@ -1,14 +1,13 @@
 var express = require('express');
-var app = express();
 var bodyParser = require('body-parser');
-var cfg = require('./src/config');
+var cfg = require('./config');
 var carsRouter = require('./src/routes/CarsRouter');
 var CarModel = require('./src/models/CarModel');
 var carsController = require('./src/controllers/CarsController');
 
 
-var port = process.env.PORT || 3000;
-
+var port = process.env.PORT || cfg.devPort;
+var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());

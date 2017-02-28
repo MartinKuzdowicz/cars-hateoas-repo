@@ -1,4 +1,4 @@
-var cfg = require('../config');
+var cfg = require('../../config');
 
 var ModelToRestResourceUtils = (() => {
 

@@ -8,7 +8,7 @@
     "build": "webpack --config webpack.config.js --progress --profile --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "kuzdowicz",
+  "author": "Martin Kuzdowicz",
   "license": "",
   "dependencies": {
     "axios": "^0.15.3",
