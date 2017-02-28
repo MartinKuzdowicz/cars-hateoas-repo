@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {Link} from 'react-router';
 
 class CarsListContainer extends  Component {
 
@@ -20,8 +21,11 @@ class CarsListContainer extends  Component {
             console.log(res.data.links);
             const carsArr = res.data.content;
             const dataAsLiElmts = carsArr.map((car) => {
+                const orderOneCarLink = `/order-car/${car._id}`;
                 return (
-                    <li key={car._id}>{car.name}</li>
+                    <li key={car._id}>
+                        <Link to={orderOneCarLink} >{car.name}</Link>
+                    </li>
                 );
             });
             component.setState({cars: dataAsLiElmts, links: res.data.links});

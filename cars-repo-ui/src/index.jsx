@@ -4,6 +4,7 @@ import App from './components/app.jsx';
 import AllCars from './components/all-cars.jsx';
 import {browserHistory, Router, Route, IndexRoute} from 'react-router';
 import AddCarForm from './components/add-car-form.jsx';
+import OrderCarForm from './components/order-car-form.jsx';
 
 
 ReactDOM.render(
@@ -12,6 +13,7 @@ ReactDOM.render(
             <IndexRoute component={AllCars}/>
             <Route path="home" component={AllCars} />
             <Route path="add-car" component={AddCarForm}/>
+            <Route path="order-car/:carId" component={OrderCarForm}/>
         </Route>
     </Router>
     , document.getElementById('root'));
