@@ -1,6 +1,5 @@
 const uuidV4 = require('uuid/v4');
-const amqp = require('amqplib/callback_api');
-const cfg = require('../../config');
+const CarOrderProducer = require('../producers/CarOrderMsgProducer');
 
 const CarsOrdersController = () => {
 
@@ -16,15 +15,7 @@ const CarsOrdersController = () => {
             timestamp: Date.now()
         };
 
-        amqp.connect('amqp://localhost', function(err, conn) {
-            conn.createChannel(function(err, ch) {
-                var que = cfg.placeOrderQue;
-
-                ch.assertQueue(que, {durable: false});
-                ch.sendToQueue(que, Buffer.from(JSON.stringify(newOrder)));
-                console.log("send newOrder to rabbitmq queue");
-            });
-        });
+        CarOrderProducer().sendOrderMsg(newOrder);
 
         res.json({msg: 'order send'});
     };

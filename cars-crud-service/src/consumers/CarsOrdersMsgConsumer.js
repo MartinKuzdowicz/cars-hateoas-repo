@@ -1,12 +1,12 @@
 const amqp = require('amqplib/callback_api');
 const cfg = require('../../config');
 
-const CreateOrdersMsgQueListener = () => {
+const CarsOrdersMsgConsumer = () => {
 
-    const startListen = () => {
-        console.log('starting CreateOrdersMsgQueListener');
+    const start = () => {
+        console.log('starting CarsOrdersMsgConsumer');
 
-        amqp.connect('amqp://localhost', function(err, conn) {
+        amqp.connect(cfg.amqpEndpoint, function(err, conn) {
             conn.createChannel(function(err, ch) {
                 var q = cfg.placeOrderQue;
 
@@ -23,11 +23,11 @@ const CreateOrdersMsgQueListener = () => {
     };
 
     return {
-        startListen: startListen
+        start: start
     }
 }
 
-module.exports = CreateOrdersMsgQueListener;
+module.exports = CarsOrdersMsgConsumer;
 
 
 
