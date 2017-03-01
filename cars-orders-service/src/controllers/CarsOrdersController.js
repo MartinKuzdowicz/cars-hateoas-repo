@@ -21,10 +21,9 @@ const CarsOrdersController = () => {
                 var que = cfg.placeOrderQue;
 
                 ch.assertQueue(que, {durable: false});
-                ch.sendToQueue(que, new Buffer(JSON.stringify(newOrder)));
+                ch.sendToQueue(que, Buffer.from(JSON.stringify(newOrder)));
                 console.log("send newOrder to rabbitmq queue");
             });
-            conn.close();
         });
 
         res.json({msg: 'order send'});
