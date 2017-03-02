@@ -10,7 +10,7 @@ const CarsOrdersController = () => {
 
         const newOrder = {
             uuid: uuidV4(),
-            clientId : Math.random(),
+            clientId : uuidV4(),
             carId: carToOrderId,
             timestamp: Date.now()
         };

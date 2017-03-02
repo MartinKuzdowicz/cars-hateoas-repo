@@ -1,7 +1,7 @@
 const amqp = require('amqplib/callback_api');
 const cfg = require('../../config');
 
-const CarsOrdersMsgConsumer = () => {
+const CarsOrdersMsgConsumer = (CarsOrdersController) => {
 
     const start = () => {
         console.log('starting CarsOrdersMsgConsumer');
@@ -16,6 +16,10 @@ const CarsOrdersMsgConsumer = () => {
 
                     console.log('------------------------------------');
                     console.log(" Received %s", msg.content.toString());
+                    console.log(msg);
+                    console.log('------------------------------------');
+
+                    CarsOrdersController.createOne(JSON.parse(msg.content.toString()));
 
                 }, {noAck: true});
             });
