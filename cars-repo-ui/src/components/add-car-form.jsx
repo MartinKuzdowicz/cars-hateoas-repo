@@ -30,7 +30,8 @@ class AddCarForm extends Component {
             name: getValueById('car_brand'),
             carModelName: getValueById('car_model'),
             type: getValueById('car_type'),
-            avgPrice: Number(getValueById('car_avg_price'))
+            avgPrice: Number(getValueById('car_avg_price')),
+            inStock: getValueById('car-is-in-stock').checked
         }
         
         axios.post(this.state.createCarPostUrl, newCar)
@@ -63,6 +64,8 @@ class AddCarForm extends Component {
                         </select>
                         avgPrice
                         <input id="car_avg_price" type="number"/>
+                        in stock
+                        <input type="checkbox" id="car-is-in-stock" />
 
                         <button onClick={(e) => this.addCarBtnHandler(e)}>add car</button>
                     </form>

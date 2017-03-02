@@ -67,6 +67,8 @@ class OrderCarForm extends Component {
                         avgPrice
                         <input id="car_avg_price" type="number" value={this.state.carToOrder.avgPrice}/>
 
+                        <input id="car-is-in-stock" type="checkbox" value={this.state.carToOrder.inStock}/>
+
                         <button onClick={(e) => this.orderCarBtnHandler(e)}>confirm car order</button>
                     </form>
                 </div>

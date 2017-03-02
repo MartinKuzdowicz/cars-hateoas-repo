@@ -4,11 +4,15 @@ var PagingUtils = require('../utils/PagingUtils');
 const carsController = (CarModelSchema, logger) => {
 
     const createOne = (req, res) => {
+        console.log('createOne ');
+
         const body = req.body;
         if (!body.name) {
             res.status(400).send('Bad Status');
             return;
         }
+
+        console.log(body);
 
         const newCar = new CarModelSchema(body);
 
