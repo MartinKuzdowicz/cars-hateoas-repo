@@ -7,6 +7,7 @@ var CarOrderModel = require('./src/models/OrderModel');
 var carsController = require('./src/controllers/CarsController');
 var CarsOrdersMsgConsumer = require('./src/consumers/CarsOrdersMsgConsumer');
 var CarsOrdersController = require('./src/controllers/OrdersController');
+var CarsOrdersRouter = require('./src/routes/CarsOrdersRouter');
 
 
 var port = process.env.PORT || cfg.devPort;
@@ -15,6 +16,7 @@ var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cfg.appMainRoute, carsRouter(carsController(CarModel)));
+app.use(cfg.appMainRoute, CarsOrdersRouter(CarsOrdersController(CarOrderModel)));
 
 app.listen(port);
 console.log(`startet server at port ${port}`);
