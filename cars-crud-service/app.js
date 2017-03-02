@@ -3,10 +3,10 @@ var bodyParser = require('body-parser');
 var cfg = require('./config');
 var carsRouter = require('./src/routes/CarsRouter');
 var CarModel = require('./src/models/CarModel');
-var CarOrderModel = require('./src/models/OrderModel');
+var CarOrderModel = require('./src/models/CarOrderModel');
 var carsController = require('./src/controllers/CarsController');
 var CarsOrdersMsgConsumer = require('./src/consumers/CarsOrdersMsgConsumer');
-var CarsOrdersController = require('./src/controllers/OrdersController');
+var CarsOrdersController = require('./src/controllers/CarsOrdersController');
 var CarsOrdersRouter = require('./src/routes/CarsOrdersRouter');
 
 
