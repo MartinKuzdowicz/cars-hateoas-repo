@@ -1,5 +1,5 @@
 ### node.js cars online shop service
-## application in Microservice Architecture
+## cars online shop prototype in Microservices Architecture
 
 Nodejs, express, mongoose, mongodb, ES6, React, webpack,
 rabbitMQ
